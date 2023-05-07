@@ -1,8 +1,13 @@
 .fem{
         background-color: white !important;
-        display: flex ;
+        display:flex ;
         .femContainer{
-                background-color:blanchedalmond;
-                flex: 6;
+                
+                flex: 5;
+                .widget{
+                        display: flex;
+                        padding: 20px;
+                        gap: 20px;
+                }
         }
 }
