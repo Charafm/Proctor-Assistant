@@ -1,4 +1,8 @@
 .fem{
-        background-color: rgb(255, 255, 255);
-       
+        background-color: white !important;
+        display: flex ;
+        .femContainer{
+                background-color:blanchedalmond;
+                flex: 6;
+        }
 }

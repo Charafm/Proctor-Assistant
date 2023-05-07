@@ -3,8 +3,8 @@ import Sidebar from "../../components/sidebar/Sidebar"
 const Fem = () => {   
     return (     
     <div className="fem">       
-        <h1 className="title">Fem</h1>
-        <sidebar/> here sidebar
+        <Sidebar/> 
+        <div className="femContainer">femContainer</div> 
     </div>   ); 
 }; 
     
