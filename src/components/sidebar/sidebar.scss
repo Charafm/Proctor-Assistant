@@ -35,7 +35,9 @@
             font-weight: bold;
             color: #999;
             margin-top: 15px;
-            margin-bottom:5px ;}
+            margin-bottom:5px ;
+            
+        }
 
             li{
             display: flex;
@@ -44,9 +46,12 @@
             cursor: pointer;
 
                 &:hover{
-                background-color: grey;
+                background-color: rgb(81, 81, 81);
                     .icon{
-                        opacity: 0.4;
+                        fill: white;
+                    }
+                    span{
+                        color: rgb(255, 255, 255); 
                     }
         
                 }
@@ -59,6 +64,7 @@
                 font-weight: 600;
                 color: #888;
                 margin-left: 10px;
+                
                 }
             }
 

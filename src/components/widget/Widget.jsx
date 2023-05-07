@@ -3,12 +3,9 @@ import "./widget.scss"
 const Widget = () => {
   return (
     <div className="widget">
-      <div className="left">
-      left
-      </div>
-      <div className="right">
-      right
-      </div>
+      <span>WINDOW EXPLAINING HOW THE EXCEL FILE SHOULD BE FOUND</span>
+
+      <span>ALGORIGHT BEHIND THE GENERATOR</span>
     </div>
   )
 }
