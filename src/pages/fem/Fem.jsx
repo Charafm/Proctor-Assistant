@@ -10,6 +10,9 @@ const Fem = () => {
             <Navbar/>
             <div className="widgets">
                 <Widget/>
+                <Widget/>
+                <Widget/>
+                <Widget/>
             </div>
         </div> 
     </div>   ); 
