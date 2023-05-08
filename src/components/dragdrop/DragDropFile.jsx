@@ -1,6 +1,6 @@
 import React from 'react';
 import './dragdropfile.scss';
-import { uploadFile } from '../../api/dropboxApi';
+import { uploadFile } from './dropboxApi.js';
 
 function DragDropFile() {
 	const [dragActive, setDragActive] = React.useState(false);
