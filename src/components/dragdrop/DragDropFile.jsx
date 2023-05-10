@@ -1,6 +1,6 @@
 import React from 'react';
 import './dragdropfile.scss';
-import { uploadFile } from './dropboxApi.js';
+
 
 function DragDropFile() {
 	const [dragActive, setDragActive] = React.useState(false);
@@ -27,7 +27,7 @@ function DragDropFile() {
 				fileType ===
 					'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
 			) {
-				uploadFile(file);
+				//uploadFile(file);
 			} else {
 				setError('Only Excel files are allowed!');
 			}
@@ -43,7 +43,7 @@ function DragDropFile() {
 				fileType ===
 					'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
 			) {
-				uploadFile(file);
+				//uploadFile(file);
 			} else {
 				setError('Only Excel files are allowed!');
 			}
