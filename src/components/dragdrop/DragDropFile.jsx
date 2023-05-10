@@ -1,7 +1,6 @@
 import React from 'react';
 import './dragdropfile.scss';
 
-
 function DragDropFile() {
 	const [dragActive, setDragActive] = React.useState(false);
 	const [error, setError] = React.useState(null);
