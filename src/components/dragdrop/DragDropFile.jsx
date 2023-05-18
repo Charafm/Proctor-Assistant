@@ -41,7 +41,6 @@ function DragDropFile() {
 				fileType ===
 					'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
 			) {
-				setError('File added successfully!');
 				uploadFile(file);
 			} else {
 				setError('Only Excel files are allowed!');
