@@ -1,10 +1,10 @@
-import React, { useState, useRef } from 'react';
+import React from 'react';
 import './dragdropfile.scss';
 function DragDropFile() {
-	const [dragActive, setDragActive] = useState(false);
-	const [error, setError] = useState(null);
-	const inputRef = useRef(null);
-	const handleDrag = (e) => {
+	const [dragActive, setDragActive] = React.useState(false);
+	const [error, setError] = React.useState(null);
+	const inputRef = React.useRef(null);
+	const handleDrag = function (e) {
 		e.preventDefault();
 		e.stopPropagation();
 		if (e.type === 'dragenter' || e.type === 'dragover') {
@@ -13,7 +13,7 @@ function DragDropFile() {
 			setDragActive(false);
 		}
 	};
-	const handleDrop = async (e) => {
+	const handleDrop = function (e) {
 		e.preventDefault();
 		e.stopPropagation();
 		setDragActive(false);
@@ -25,13 +25,13 @@ function DragDropFile() {
 				fileType ===
 					'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
 			) {
-				await uploadFile(file);
+				uploadFile(file);
 			} else {
 				setError('Only Excel files are allowed!');
 			}
 		}
 	};
-	const handleChange = async (e) => {
+	const handleChange = function (e) {
 		e.preventDefault();
 		if (e.target.files && e.target.files[0]) {
 			const file = e.target.files[0];
@@ -42,7 +42,7 @@ function DragDropFile() {
 					'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
 			) {
 				setError('File added successfully!');
-				await uploadFile(file);
+				uploadFile(file);
 			} else {
 				setError('Only Excel files are allowed!');
 			}
@@ -51,22 +51,18 @@ function DragDropFile() {
 	const onButtonClick = () => {
 		inputRef.current.click();
 	};
-	const uploadFile = async (file) => {
-		try {
-			const formData = new FormData();
-			formData.append('file', file);
-			const response = await fetch('http://localhost:5000/upload', {
-				method: 'POST',
-				body: formData,
+	const uploadFile = (file) => {
+		const formData = new FormData();
+		formData.append('file', file);
+		fetch('/upload', { method: 'POST', body: formData })
+			.then((response) => response.json())
+			.then((data) => {
+				console.log(data); // Handle the response here, you can update the UI or perform any necessary actions
+			})
+			.catch((error) => {
+				console.error(error);
+				setError('An error occurred while uploading the file.');
 			});
-			if (response.ok) {
-				console.log('File uploaded successfully');
-			} else {
-				console.error('File upload failed');
-			}
-		} catch (error) {
-			console.error('File upload error:', error);
-		}
 	};
 	return (
 		<form

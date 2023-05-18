@@ -1,24 +1,23 @@
 const express = require('express');
-const multer = require('multer');
-const xlsx = require('xlsx');
+const path = require('path');
+const fileUpload = require('express-fileupload');
 const app = express();
-const upload = multer({ dest: 'uploads/' }); // Set the destination folder to store uploaded files
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-	console.log(`Server is running on port ${PORT}`);
-});
-
-app.post('/upload', upload.single('file'), (req, res) => {
-	try {
-		const workbook = xlsx.readFile(req.file.path); // Read the uploaded file
-		// Process the Excel file and save the data to the database or perform any required operations
-		res
-			.status(200)
-			.json({ message: 'File uploaded and processed successfully' });
-	} catch (error) {
-		console.error(error);
-		res
-			.status(500)
-			.json({ error: 'An error occurred while processing the file' });
+const port = 5000;
+// Middleware
+app.use(fileUpload()); // Route to handle file upload
+app.post('/upload', (req, res) => {
+	if (!req.files || Object.keys(req.files).length === 0) {
+		return res.status(400).json({ message: 'No files were uploaded.' });
 	}
+	const file = req.files.file;
+	const uploadPath = path.join(__dirname, 'uploads', file.name);
+	file.mv(uploadPath, (err) => {
+		if (err) {
+			console.error(err);
+			return res
+				.status(500)
+				.json({ message: 'Error occurred while uploading the file.' });
+		}
+		res.json({ message: 'File uploaded successfully.' });
+	});
 });
