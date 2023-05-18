@@ -1,11 +1,10 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import './dragdropfile.scss';
-
 function DragDropFile() {
-	const [dragActive, setDragActive] = React.useState(false);
-	const [error, setError] = React.useState(null);
-	const inputRef = React.useRef(null);
-	const handleDrag = function (e) {
+	const [dragActive, setDragActive] = useState(false);
+	const [error, setError] = useState(null);
+	const inputRef = useRef(null);
+	const handleDrag = (e) => {
 		e.preventDefault();
 		e.stopPropagation();
 		if (e.type === 'dragenter' || e.type === 'dragover') {
@@ -14,7 +13,7 @@ function DragDropFile() {
 			setDragActive(false);
 		}
 	};
-	const handleDrop = function (e) {
+	const handleDrop = async (e) => {
 		e.preventDefault();
 		e.stopPropagation();
 		setDragActive(false);
@@ -26,13 +25,13 @@ function DragDropFile() {
 				fileType ===
 					'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
 			) {
-				//uploadFile(file);
+				await uploadFile(file);
 			} else {
 				setError('Only Excel files are allowed!');
 			}
 		}
 	};
-	const handleChange = function (e) {
+	const handleChange = async (e) => {
 		e.preventDefault();
 		if (e.target.files && e.target.files[0]) {
 			const file = e.target.files[0];
@@ -43,7 +42,7 @@ function DragDropFile() {
 					'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
 			) {
 				setError('File added successfully!');
-				//uploadFile(file);
+				await uploadFile(file);
 			} else {
 				setError('Only Excel files are allowed!');
 			}
@@ -51,6 +50,23 @@ function DragDropFile() {
 	};
 	const onButtonClick = () => {
 		inputRef.current.click();
+	};
+	const uploadFile = async (file) => {
+		try {
+			const formData = new FormData();
+			formData.append('file', file);
+			const response = await fetch('http://localhost:5000/upload', {
+				method: 'POST',
+				body: formData,
+			});
+			if (response.ok) {
+				console.log('File uploaded successfully');
+			} else {
+				console.error('File upload failed');
+			}
+		} catch (error) {
+			console.error('File upload error:', error);
+		}
 	};
 	return (
 		<form
@@ -76,7 +92,8 @@ function DragDropFile() {
 					<button
 						className="upload-button"
 						onClick={onButtonClick}>
-						Upload a file
+						{' '}
+						Upload a file{' '}
 					</button>{' '}
 				</div>{' '}
 			</label>{' '}
