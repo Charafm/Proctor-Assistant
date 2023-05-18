@@ -1,13 +1,13 @@
-import "./widget.scss"
+import './widget.scss';
 
 const Widget = () => {
-  return (
-    <div className="widget">
-      <span>WINDOW EXPLAINING HOW THE EXCEL FILE SHOULD BE FOUND</span>
+	return (
+		<div className="widget">
+			<span>WINDOW EXPLAINING HOW THE EXCEL FILE SHOULD BE</span>
 
-      <span>ALGORIGHT BEHIND THE GENERATOR</span>
-    </div>
-  )
-}
+			<span>ALGORIGHM BEHIND THE GENERATOR</span>
+		</div>
+	);
+};
 
-export default Widget
+export default Widget;
