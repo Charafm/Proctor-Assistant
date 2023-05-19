@@ -97,5 +97,6 @@ async function generate() {
 	}
 }
 // Usage
-const excelFilePath = 'path/to/excel/file.xlsx'; // Call the function
+const excelFilePath = 'path/to/excel/file.xlsx';
+// Call the function
 importExcelFileToTables(excelFilePath);
