@@ -3,6 +3,7 @@ import Sidebar from '../../components/sidebar/Sidebar';
 import Navbar from '../../components/navbar/Navbar';
 import Widget from '../../components/widget/Widget';
 import FileUploader from '../../components/dragdrop/FileUploader';
+
 const Fem = () => {
 	return (
 		<div className="fem">

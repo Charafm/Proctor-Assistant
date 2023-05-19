@@ -25,7 +25,7 @@ app.post('/upload', (req, res) => {
 		}
 		res.json({ message: 'File uploaded successfully.' });
 		alert('File uploaded successfully!');
-		importExcelFileToTables();
+		//importExcelFileToTables();
 	});
 });
 app.listen(port, () => {

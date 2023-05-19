@@ -1,5 +1,6 @@
 import React from 'react';
 import './fileuploader.scss';
+import importExcelFileToTables from '../../api/algorithm.js';
 function FileUploader() {
 	const [selectedFile, setSelectedFile] = React.useState(null);
 	const handleFileChange = (event) => {
@@ -18,6 +19,7 @@ function FileUploader() {
 				.then((response) => response.json())
 				.then((data) => {
 					console.log(data);
+					importExcelFileToTables();
 				})
 				.catch((error) => {
 					console.error(error);
