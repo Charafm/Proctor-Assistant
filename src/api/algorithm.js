@@ -31,10 +31,7 @@ async function importExcelFileToTables(filePath) {
 				[courseId, classroomId, instructorId, day, time]
 			);
 		}
-		// Create the course table.
-		await pool.query(
-			`       CREATE TABLE course (         id serial PRIMARY KEY,         course_id integer NOT NULL,         course_code text NOT NULL,         title text NOT NULL,         begin_time text NOT NULL,         end_time text NOT NULL,         duration integer NOT NULL       )     `
-		);
+
 		// Insert the data from the Excel file into the course table.
 		for (const row of excelData) {
 			const courseId = row[0];
@@ -49,10 +46,7 @@ async function importExcelFileToTables(filePath) {
 				[courseId, courseCode, title, beginTime, endTime, duration]
 			);
 		}
-		// Create the instructor table.
-		await pool.query(
-			`       CREATE TABLE instructor (         id serial PRIMARY KEY,         instructor_id integer NOT NULL,         name text NOT NULL       )     `
-		);
+
 		// Insert the data from the Excel file into the instructor table.
 		for (const row of excelData) {
 			const instructorId = row[9];
@@ -63,10 +57,7 @@ async function importExcelFileToTables(filePath) {
 				[instructorId, name]
 			);
 		}
-		// Create the classroom table.
-		await pool.query(
-			`       CREATE TABLE classroom (         id serial PRIMARY KEY,         classroom_id integer NOT NULL,         building_code text NOT NULL,         room_code text NOT NULL       )     `
-		);
+
 		// Insert the data from the Excel file into the classroom table
 		for (const row of excelData) {
 			const classroomId = row[6];
