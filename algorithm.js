@@ -14,50 +14,85 @@ async function importExcelFileToTables(filePath) {
 			port: 5432,
 		});
 		await pool.query('BEGIN');
-		await pool.query('TRUNCATE TABLE course');
-		await pool.query('TRUNCATE TABLE classroom');
-		await pool.query('TRUNCATE TABLE instructor');
-		const queries = [];
-		for (let i = 1; i < excelData.length; i++) {
-			const row = excelData[i];
-			const course_id = row[0];
-			const course_code = row[1];
-			const title = row[2];
-			const begin_time = row[3];
-			const end_time = row[4];
-			const duration = row[5];
-			const classroom_id = row[6];
-			const building_code = row[7];
-			const room_code = row[8];
-			const instructor_id = row[9];
-			const name = row[10];
-			const courseQuery = {
-				text: `           INSERT INTO course (course_id, course_code, title, begin_time, end_time, duration)           VALUES ($1, $2, $3, $4, $5, $6)         `,
-				values: [course_id, course_code, title, begin_time, end_time, duration],
-			};
-			queries.push(pool.query(courseQuery));
-			const classroomQuery = {
-				text: `           INSERT INTO classroom (classroom_id, building_code, room_code)           VALUES ($1, $2, $3)         `,
-				values: [classroom_id, building_code, room_code],
-			};
-			queries.push(pool.query(classroomQuery));
-			const instructorQuery = {
-				text: `           INSERT INTO instructor (instructor_id, name)           VALUES ($1, $2)         `,
-				values: [instructor_id, name],
-			};
-			queries.push(pool.query(instructorQuery));
+		// Create the finalExam table.
+		await pool.query(
+			`       CREATE TABLE finalExam (         id serial PRIMARY KEY,         course_id integer NOT NULL,         classroom_id integer NOT NULL,         instructor_id integer NOT NULL,         day text NOT NULL,         time text NOT NULL       )     `
+		);
+		// Insert the data from the Excel file into the finalExam table.
+		for (const row of excelData) {
+			const courseId = row[0];
+			const classroomId = row[6];
+			const instructorId = row[9];
+			const day = row[3];
+			const time = row[4];
+			// Insert the final exam data into the database.
+			await pool.query(
+				`         INSERT INTO finalExam (course_id, classroom_id, instructor_id, day, time)         VALUES ($1, $2, $3, $4, $5)       `,
+				[courseId, classroomId, instructorId, day, time]
+			);
 		}
-		await Promise.all(queries);
+		// Create the course table.
+		await pool.query(
+			`       CREATE TABLE course (         id serial PRIMARY KEY,         course_id integer NOT NULL,         course_code text NOT NULL,         title text NOT NULL,         begin_time text NOT NULL,         end_time text NOT NULL,         duration integer NOT NULL       )     `
+		);
+		// Insert the data from the Excel file into the course table.
+		for (const row of excelData) {
+			const courseId = row[0];
+			const courseCode = row[1];
+			const title = row[2];
+			const beginTime = row[3];
+			const endTime = row[4];
+			const duration = row[5];
+			// Insert the course data into the database.
+			await pool.query(
+				`         INSERT INTO course (course_id, course_code, title, begin_time, end_time, duration)         VALUES ($1, $2, $3, $4, $5, $6)       `,
+				[courseId, courseCode, title, beginTime, endTime, duration]
+			);
+		}
+		// Create the instructor table.
+		await pool.query(
+			`       CREATE TABLE instructor (         id serial PRIMARY KEY,         instructor_id integer NOT NULL,         name text NOT NULL       )     `
+		);
+		// Insert the data from the Excel file into the instructor table.
+		for (const row of excelData) {
+			const instructorId = row[9];
+			const name = row[10];
+			// Insert the instructor data into the database.
+			await pool.query(
+				`         INSERT INTO instructor (instructor_id, name)         VALUES ($1, <span class="math-inline">2 )  `,
+				[instructorId, name]
+			);
+		}
+		// Create the classroom table.
+		await pool.query(
+			`       CREATE TABLE classroom (         id serial PRIMARY KEY,         classroom_id integer NOT NULL,         building_code text NOT NULL,         room_code text NOT NULL       )     `
+		);
+		// Insert the data from the Excel file into the classroom table
+		for (const row of excelData) {
+			const classroomId = row[6];
+			const buildingCode = row[7];
+			const roomCode = row[8];
+			// Insert the classroom data into the database .
+			await pool.query(
+				` INSERT INTO classroom  (classroom _id, building _code, room _code ) VALUES  (</span>   `,
+				[classroomId, buildingCode, roomCode]
+			);
+		}
 		await pool.query('COMMIT');
 		await pool.end();
 		console.log('Excel file imported successfully.');
-		await generate();
 	} catch (error) {
 		console.error('Error occurred while importing the Excel file:', error);
 	}
 }
-function generateFinalExamSchedule(courses) {
-	// Create a list of exam slots for each day
+async function generateFinalExamSchedule() {
+	const pool = new Pool({
+		user: 'moujahidc',
+		host: 'localhost',
+		database: 'moujahidc',
+		password: 'YahyaMjhd2001',
+		port: 5432,
+	});
 	const examSlots = [
 		{ day: 'Monday', time: '9:00 AM' },
 		{ day: 'Monday', time: '1:00 PM' },
@@ -70,18 +105,15 @@ function generateFinalExamSchedule(courses) {
 		{ day: 'Friday', time: '9:00 AM' },
 		{ day: 'Friday', time: '1:00 PM' },
 	];
-	// Create a map of courses by department
-	const coursesByDepartment = new Map();
-	for (const course of courses) {
-		if (!coursesByDepartment.has(course.department)) {
-			coursesByDepartment.set(course.department, []);
-		}
-		coursesByDepartment.get(course.department).push(course);
-	}
-	// Create a schedule object to store the final exam schedule
+	const courses = await pool.query('SELECT * FROM course');
+	const instructors = await pool.query('SELECT * FROM instructor');
+	const classrooms = await pool.query('SELECT * FROM classroom');
 	const schedule = {};
-	// Assign exam slots to courses in each department
-	for (const [department, courses] of coursesByDepartment) {
+	for (const course of courses) {
+		const department = course.department;
+		const courseId = course.course_id;
+		const instructorId = course.instructor_id;
+		const classroomId = course.classroom_id;
 		// Sort courses by enrollment size in descending order
 		courses.sort((a, b) => b.enrollment - a.enrollment);
 		// Assign exam slots to courses
@@ -108,36 +140,18 @@ function generateFinalExamSchedule(courses) {
 		if (err) throw err;
 		console.log('Final exam schedule saved to final-exam-schedule.json');
 	});
-	return schedule;
-}
-async function generate() {
-	try {
-		const pool = new Pool({
-			user: 'moujahidc',
-			host: 'localhost',
-			database: 'moujahidc',
-			password: 'YahyaMjhd2001',
-			port: 5432,
-		});
-		const courseQuery = {
-			text: `         SELECT *         FROM course         LIMIT 10       `,
-		};
-		const courseResult = await pool.query(courseQuery);
-		console.log('Courses:', courseResult.rows);
-		const classroomQuery = {
-			text: `         SELECT *         FROM classroom         LIMIT 10       `,
-		};
-		const classroomResult = await pool.query(classroomQuery);
-		console.log('Classrooms:', classroomResult.rows);
-		const instructorQuery = {
-			text: `         SELECT *         FROM instructor         LIMIT 10       `,
-		};
-		const instructorResult = await pool.query(instructorQuery);
-		console.log('Instructors:', instructorResult.rows);
-		await pool.end();
-	} catch (error) {
-		console.error('Error occurred while generating data:', error);
+	// Insert the final exam schedule into the finalExam table
+	for (const day in schedule) {
+		for (const time in schedule[day]) {
+			const course = schedule[day][time];
+			await pool.query(
+				`         INSERT INTO finalExam (course_id, classroom_id, instructor_id, day, time)         VALUES ($1, $2, $3, $4, $5)       `,
+				[course.course_id, course.classroom_id, course.instructor_id, day, time]
+			);
+		}
 	}
+	await pool.end();
 }
 const excelFilePath = './uploads/data.xlsx';
 importExcelFileToTables(excelFilePath);
+generateFinalExamSchedule();
