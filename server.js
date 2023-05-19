@@ -1,3 +1,4 @@
+import importExcelFileToTables from '././algorithm';
 const express = require('express');
 const path = require('path');
 const fileUpload = require('express-fileupload');
@@ -23,6 +24,8 @@ app.post('/upload', (req, res) => {
 			});
 		}
 		res.json({ message: 'File uploaded successfully.' });
+		alert('File uploaded successfully!');
+		importExcelFileToTables();
 	});
 });
 app.listen(port, () => {
