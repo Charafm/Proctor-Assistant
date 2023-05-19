@@ -13,7 +13,7 @@ function FileUploader() {
 	const handleUpload = () => {
 		if (selectedFile) {
 			const formData = new FormData();
-			formData.append('file', selectedFile, 'data.xlsx'); // Renaming the file to "data.xlsx"
+			formData.append('file', selectedFile, 'data.xlsx');
 			fetch('http://localhost:5000/upload', { method: 'POST', body: formData })
 				.then((response) => response.json())
 				.then((data) => {
@@ -33,7 +33,7 @@ function FileUploader() {
 					type="file"
 					id="file-input"
 					onChange={handleFileChange}
-					accept=".xls,.xlsx" // Allowing only Excel files
+					accept=".xls,.xlsx"
 					style={{ display: 'none' }}
 				/>{' '}
 				<button onClick={handleChooseFile}>Choose File</button>{' '}

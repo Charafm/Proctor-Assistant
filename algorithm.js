@@ -1,26 +1,22 @@
+const fs = require('fs');
 const xlsx = require('xlsx');
 const { Pool } = require('pg');
-// Function to import the Excel file to the tables
 async function importExcelFileToTables(filePath) {
 	try {
-		// Read the Excel file
 		const workbook = xlsx.readFile(filePath);
 		const worksheet = workbook.Sheets[workbook.SheetNames[0]];
 		const excelData = xlsx.utils.sheet_to_json(worksheet, { header: 1 });
-		// Create a connection pool to the PostgreSQL database
 		const pool = new Pool({
-			user: 'your_username',
-			host: 'your_host',
-			database: 'your_database',
-			password: 'your_password',
-			port: 5432, // Change the port if necessary
+			user: 'moujahidc',
+			host: 'localhost',
+			database: 'moujahidc',
+			password: 'YahyaMjhd2001',
+			port: 5432,
 		});
-		// Truncate the existing tables
 		await pool.query('BEGIN');
 		await pool.query('TRUNCATE TABLE course');
 		await pool.query('TRUNCATE TABLE classroom');
 		await pool.query('TRUNCATE TABLE instructor');
-		// Iterate over the Excel data to populate the tables
 		const queries = [];
 		for (let i = 1; i < excelData.length; i++) {
 			const row = excelData[i];
@@ -35,7 +31,6 @@ async function importExcelFileToTables(filePath) {
 			const room_code = row[8];
 			const instructor_id = row[9];
 			const name = row[10];
-			// Insert data into the tables using parameterized queries
 			const courseQuery = {
 				text: `           INSERT INTO course (course_id, course_code, title, begin_time, end_time, duration)           VALUES ($1, $2, $3, $4, $5, $6)         `,
 				values: [course_id, course_code, title, begin_time, end_time, duration],
@@ -52,29 +47,78 @@ async function importExcelFileToTables(filePath) {
 			};
 			queries.push(pool.query(instructorQuery));
 		}
-		// Execute all the queries in parallel
 		await Promise.all(queries);
-		// Commit the transaction
 		await pool.query('COMMIT');
-		// Release the connection pool
 		await pool.end();
 		console.log('Excel file imported successfully.');
-		// Generate some data using the inserted data
 		await generate();
 	} catch (error) {
 		console.error('Error occurred while importing the Excel file:', error);
 	}
-} // Function to generate some data using the inserted data
+}
+function generateFinalExamSchedule(courses) {
+	// Create a list of exam slots for each day
+	const examSlots = [
+		{ day: 'Monday', time: '9:00 AM' },
+		{ day: 'Monday', time: '1:00 PM' },
+		{ day: 'Tuesday', time: '9:00 AM' },
+		{ day: 'Tuesday', time: '1:00 PM' },
+		{ day: 'Wednesday', time: '9:00 AM' },
+		{ day: 'Wednesday', time: '1:00 PM' },
+		{ day: 'Thursday', time: '9:00 AM' },
+		{ day: 'Thursday', time: '1:00 PM' },
+		{ day: 'Friday', time: '9:00 AM' },
+		{ day: 'Friday', time: '1:00 PM' },
+	];
+	// Create a map of courses by department
+	const coursesByDepartment = new Map();
+	for (const course of courses) {
+		if (!coursesByDepartment.has(course.department)) {
+			coursesByDepartment.set(course.department, []);
+		}
+		coursesByDepartment.get(course.department).push(course);
+	}
+	// Create a schedule object to store the final exam schedule
+	const schedule = {};
+	// Assign exam slots to courses in each department
+	for (const [department, courses] of coursesByDepartment) {
+		// Sort courses by enrollment size in descending order
+		courses.sort((a, b) => b.enrollment - a.enrollment);
+		// Assign exam slots to courses
+		for (const course of courses) {
+			let assigned = false;
+			for (const slot of examSlots) {
+				if (!schedule[slot.day] || !schedule[slot.day][slot.time]) {
+					schedule[slot.day] = schedule[slot.day] || {};
+					schedule[slot.day][slot.time] = course;
+					assigned = true;
+					break;
+				}
+			}
+			if (!assigned) {
+				throw new Error(
+					`Cannot assign exam slot to ${course.department} ${course.number}`
+				);
+			}
+		}
+	}
+	// Save schedule as JSON file
+	const scheduleData = JSON.stringify(schedule);
+	fs.writeFile('final-exam-schedule.json', scheduleData, (err) => {
+		if (err) throw err;
+		console.log('Final exam schedule saved to final-exam-schedule.json');
+	});
+	return schedule;
+}
 async function generate() {
 	try {
-		// Create a connection pool to the PostgreSQL database
 		const pool = new Pool({
-			user: 'your_username',
-			host: 'your_host',
-			database: 'your_database',
-			password: 'your_password',
-			port: 5432, // Change the port if necessary
-		}); // Select some data from the tables using parameterized queries
+			user: 'moujahidc',
+			host: 'localhost',
+			database: 'moujahidc',
+			password: 'YahyaMjhd2001',
+			port: 5432,
+		});
 		const courseQuery = {
 			text: `         SELECT *         FROM course         LIMIT 10       `,
 		};
@@ -90,13 +134,10 @@ async function generate() {
 		};
 		const instructorResult = await pool.query(instructorQuery);
 		console.log('Instructors:', instructorResult.rows);
-		// Release the connection pool
 		await pool.end();
 	} catch (error) {
 		console.error('Error occurred while generating data:', error);
 	}
 }
-// Usage
-const excelFilePath = 'path/to/excel/file.xlsx';
-// Call the function
+const excelFilePath = './uploads/data.xlsx';
 importExcelFileToTables(excelFilePath);
