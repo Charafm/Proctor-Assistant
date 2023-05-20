@@ -1,7 +1,7 @@
 import React from 'react';
 import './dashboard.scss';
 import Sidebar from '../../components/sidebar/Sidebar';
-import Navbar from '../../components/navbar/Navbar';
+
 import FileUploader from '../../components/dragdrop/FileUploader';
 const Dashboard = () => {
 	return (
@@ -10,7 +10,6 @@ const Dashboard = () => {
 			<Sidebar />{' '}
 			<div className="dashboardContainer">
 				{' '}
-				<Navbar />{' '}
 				{
 					<div className="FileUploader">
 						{' '}

@@ -6,4 +6,13 @@
 .dashboardContainer {
 	flex: 5;
 	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+}
+.fileuploader {
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
