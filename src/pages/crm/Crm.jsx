@@ -2,6 +2,10 @@ import React, { useState, useEffect } from 'react';
 import './crm.scss';
 import Sidebar from '../../components/sidebar/Sidebar';
 import axios from 'axios';
+import { Select, Button } from 'antd';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+const { Option } = Select;
 const CRM = () => {
 	const [courses, setCourses] = useState([]);
 	const [selectedCourse, setSelectedCourse] = useState(null);
@@ -9,6 +13,7 @@ const CRM = () => {
 	const [selectedBuilding, setSelectedBuilding] = useState(null);
 	const [rooms, setRooms] = useState([]);
 	const [selectedRoom, setSelectedRoom] = useState(null);
+	const [showBuildingRoom, setShowBuildingRoom] = useState(false);
 	useEffect(() => {
 		axios
 			.get('http://localhost:3002/api/courses')
@@ -46,6 +51,7 @@ const CRM = () => {
 			(course) => course.courseid === courseId
 		);
 		setSelectedCourse(selectedCourse);
+		setShowBuildingRoom(true);
 	};
 	const handleBuildingSelect = (buildingId) => {
 		setSelectedBuilding(buildingId);
@@ -62,10 +68,11 @@ const CRM = () => {
 					{ buildingId: selectedBuilding, roomId: selectedRoom }
 				)
 				.then((response) => {
-					console.log('Location updated successfully');
+					toast.success('Location updated successfully');
 					setSelectedCourse(null);
 					setSelectedBuilding(null);
 					setSelectedRoom(null);
+					setShowBuildingRoom(false);
 				})
 				.catch((error) => {
 					console.error('Failed to update location:', error);
@@ -82,61 +89,67 @@ const CRM = () => {
 				<div className="formContainer">
 					{' '}
 					<label htmlFor="courseSelect">Select Course:</label>{' '}
-					<select
+					<Select
 						id="courseSelect"
 						value={selectedCourse ? selectedCourse.courseid : ''}
-						onChange={(e) => handleCourseSelect(Number(e.target.value))}>
+						onChange={(value) => handleCourseSelect(Number(value))}>
 						{' '}
-						<option value="">-- Select Course --</option>{' '}
+						<Option value="">-- Select Course --</Option>{' '}
 						{courses.map((course) => (
-							<option
+							<Option
 								key={course.courseid}
 								value={course.courseid}>
 								{' '}
 								{course.coursename}{' '}
-							</option>
+							</Option>
 						))}{' '}
-					</select>{' '}
-					{selectedCourse && (
-						<div>
+					</Select>{' '}
+					{showBuildingRoom && (
+						<div className="buildingRoomContainer">
 							{' '}
 							<label htmlFor="buildingSelect">Select Building:</label>{' '}
-							<select
+							<Select
 								id="buildingSelect"
 								value={selectedBuilding || ''}
-								onChange={(e) => handleBuildingSelect(Number(e.target.value))}>
+								onChange={(value) => handleBuildingSelect(Number(value))}>
 								{' '}
-								<option value="">-- Select Building --</option>{' '}
+								<Option value="">-- Select Building --</Option>{' '}
 								{buildings.map((building) => (
-									<option
+									<Option
 										key={building.locationid}
 										value={building.locationid}>
 										{' '}
 										{building.building}{' '}
-									</option>
+									</Option>
 								))}{' '}
-							</select>{' '}
+							</Select>{' '}
 							<label htmlFor="roomSelect">Select Room:</label>{' '}
-							<select
+							<Select
 								id="roomSelect"
 								value={selectedRoom || ''}
-								onChange={(e) => handleRoomSelect(Number(e.target.value))}>
+								onChange={(value) => handleRoomSelect(Number(value))}>
 								{' '}
-								<option value="">-- Select Room --</option>{' '}
+								<Option value="">-- Select Room --</Option>{' '}
 								{rooms.map((room) => (
-									<option
+									<Option
 										key={room.locationid}
 										value={room.locationid}>
 										{' '}
 										{room.classroom}{' '}
-									</option>
+									</Option>
 								))}{' '}
-							</select>{' '}
-							<button onClick={handleLocationUpdate}>Update Location</button>{' '}
+							</Select>{' '}
+							<Button
+								type="primary"
+								onClick={handleLocationUpdate}>
+								{' '}
+								Update Location{' '}
+							</Button>{' '}
 						</div>
 					)}{' '}
 				</div>{' '}
 			</div>{' '}
+			<ToastContainer />{' '}
 		</div>
 	);
 };
