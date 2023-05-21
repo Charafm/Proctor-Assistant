@@ -1,6 +1,7 @@
 import Fem from './pages/fem/Fem';
 import Home from './pages/home/Home';
 import Dashboard from './pages/Dashboard/Dashboard';
+import Login from './pages/login/Login';
 import Crm from './pages/crm/Crm';
 import React from 'react';
 
@@ -27,6 +28,10 @@ function App() {
 				<Route
 					path="crm/*"
 					element={<Crm />}
+				/>{' '}
+				<Route
+					path="login/*"
+					element={<Login />}
 				/>{' '}
 			</Routes>{' '}
 		</BrowserRouter>

@@ -15,7 +15,7 @@ function FileUploader() {
 		if (selectedFile) {
 			const formData = new FormData();
 			formData.append('file', selectedFile, 'data.xlsx');
-			fetch('http://localhost:5000/upload', { method: 'POST', body: formData })
+			fetch('http://localhost:2000/upload', { method: 'POST', body: formData })
 				.then((response) => response.json())
 				.then((data) => {
 					console.log(data);

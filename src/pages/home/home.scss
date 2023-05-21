@@ -1,3 +1,29 @@
-.fem{         
-    background-color: aquamarine;         
-    color: black; }
+.mainContainer {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+}
+.titleContainer {
+	font-size: 24px;
+	margin-bottom: 20px;
+}
+.contentContainer {
+	text-align: center;
+	margin-bottom: 20px;
+}
+.buttonContainer {
+	margin-top: 20px;
+}
+.inputButton {
+	padding: 10px 20px;
+	font-size: 16px;
+	background-color: #007bff;
+	color: #fff;
+	border: none;
+	cursor: pointer;
+}
+.inputButton:hover {
+	background-color: #0056b3;
+}

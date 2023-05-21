@@ -1,6 +1,6 @@
 const pg = require('pg');
 const pool = new pg.Pool({
-	user: 'moujahidc',
+	user: 'postgres',
 	host: 'localhost',
 	database: 'moujahidc',
 	password: 'YahyaMjhd2001',
@@ -11,7 +11,7 @@ pool.connect((err, client, release) => {
 		return console.error('Error acquiring client', err.stack);
 	}
 	console.log('Connected to database');
-	client.query('SELECT NOW()', (err, result) => {
+	client.query('SELECT * FROM userlogin;', (err, result) => {
 		release();
 		if (err) {
 			return console.error('Error executing query', err.stack);
