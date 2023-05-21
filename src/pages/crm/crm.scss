@@ -7,3 +7,41 @@
 	flex-grow: 5;
 	position: relative;
 }
+.crmContent {
+	width: 400px;
+	padding: 20px;
+	background-color: #f5f5f5;
+	border-radius: 5px;
+	text-align: center;
+}
+h1 {
+	font-size: 24px;
+	margin-bottom: 20px;
+}
+label {
+	display: block;
+	margin-bottom: 10px;
+	font-weight: bold;
+}
+
+button {
+	padding: 10px 20px;
+	background-color: #007bff;
+	color: #fff;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+}
+button:hover {
+	background-color: #0056b3;
+}
+.error {
+	color: red;
+	margin-top: 10px;
+}
+select {
+	width: 100%;
+	padding: 8px;
+	margin-bottom: 20px;
+	color: black;
+}

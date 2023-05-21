@@ -21,6 +21,7 @@
 		"html-to-image": "^1.11.11",
 		"http": "^0.0.1-security",
 		"multer": "^1.4.5-lts.1",
+		"nodemailer": "^6.9.2",
 		"nodemon": "^2.0.22",
 		"panda": "^0.6.5",
 		"pg": "^8.11.0",
