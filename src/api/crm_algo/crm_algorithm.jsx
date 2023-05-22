@@ -9,7 +9,7 @@ const pool = new Pool({
 	user: 'postgres',
 	host: 'localhost',
 	database: 'moujahidc',
-	password: '****',
+	password: 'YahyaMjhd2001',
 	port: 5432,
 });
 app.get('/api/courses', (req, res) => {
