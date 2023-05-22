@@ -10,7 +10,7 @@ async function importExcelFileToTables(filePath) {
 			user: 'moujahidc',
 			host: 'localhost',
 			database: 'moujahidc',
-			password: 'YahyaMjhd2001',
+			password: '*****',
 			port: 5432,
 		});
 		await pool.query('BEGIN');
